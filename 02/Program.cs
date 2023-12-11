@@ -52,7 +52,7 @@ foreach (var line in input.Split("\r\n")){
     }
     if (possible)
     {
-        Console.Write("impossible");
+        Console.Write("possible");
         total1 += game;
     }
     total2 += maxRed * maxGreen * maxBlue;
