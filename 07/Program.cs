@@ -29,12 +29,22 @@ foreach (var line in input.Split("\r\n"))
 
 int total = 0;
 var ordered = data.OrderBy(x => x.hand, new HandComparer()).ToList();
-for(int rank = 1; rank <= ordered.Count; rank++)
+for (int rank = 1; rank <= ordered.Count; rank++)
 {
     total += rank * ordered[rank - 1].bid;
 }
 
 Console.WriteLine($"Total: {total}");
+
+int total2 = 0;
+var ordered2 = data.OrderBy(x => x.hand, new HandComparer2()).ToList();
+for (int rank = 1; rank <= ordered.Count; rank++)
+{
+    total2 += rank * ordered2[rank - 1].bid;
+}
+
+Console.WriteLine($"Total2: {total2}");
+
 public enum HandType
 {
     FiveOfAKind = 7,
@@ -116,13 +126,70 @@ public class HandComparer : IComparer<string>
         var t1 = (int)WhatHand(x);
         var t2 = (int)WhatHand(y);
 
-        if(t1 == t2)
+        if (t1 == t2)
         {
-            for(var i = 0; i<5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 t1 = Strength(x[i]);
                 t2 = Strength(y[i]);
-                if(t1 != t2)
+                if (t1 != t2)
+                {
+                    return t1.CompareTo(t2);
+                }
+            }
+            return 0;
+        }
+
+        return t1.CompareTo(t2);
+    }
+}
+
+public class HandComparer2 : IComparer<string>
+{
+    public static string cardOrder = "AKQT98765432J";
+    public static HandType BestHand(string input)
+    {
+        var result = new List<(string hand, HandType handType)>();
+
+        foreach (var card in cardOrder.ToArray())
+        {
+            var hand = input.Replace('J', card);
+            result.Add((hand, HandComparer.WhatHand(hand)));
+        }
+        return result.MaxBy(x => x.handType).handType;
+    }
+
+    int Strength2(char c)
+    {
+        switch (c)
+        {
+            case 'A':
+                return 14;
+            case 'K':
+                return 13;
+            case 'Q':
+                return 12;
+            case 'J':
+                return 1;
+            case 'T':
+                return 10;
+            default:
+                return int.Parse(c.ToString());
+        }
+    }
+
+    public int Compare(string? x, string? y)
+    {
+        var t1 = (int)BestHand(x);
+        var t2 = (int)BestHand(y);
+
+        if (t1 == t2)
+        {
+            for (var i = 0; i < 5; i++)
+            {
+                t1 = Strength2(x[i]);
+                t2 = Strength2(y[i]);
+                if (t1 != t2)
                 {
                     return t1.CompareTo(t2);
                 }
