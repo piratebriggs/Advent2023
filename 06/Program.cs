@@ -5,14 +5,14 @@ Console.WriteLine("Hello, World!");
 
 
 
-//var input = new List<(int time, int distance)>
+//var input = new List<(long time, long distance)>
 //{
 //    (7,9),
 //    (15,40),
 //    (30,200),
 //};
 
-var input = new List<(int time, int distance)>
+var input1 = new List<(long time, long distance)>
 {
     (40,215),
     (70,1051),
@@ -20,14 +20,19 @@ var input = new List<(int time, int distance)>
     (79,1005),
 };
 
-int waysToBeat(int time, int recordDistance)
+var input2 = new List<(long time, long distance)>
 {
-    int ways = 0;
-    for (int buttonSecs = 0; buttonSecs <= time; buttonSecs++)
+    (40709879,215105121471005),
+};
+
+long waysToBeat(long time, long recordDistance)
+{
+    long ways = 0;
+    for (long buttonSecs = 0; buttonSecs <= time; buttonSecs++)
     {
-        var remaining = time - buttonSecs;
-        var speed = buttonSecs;
-        var distance = remaining * speed;
+        long remaining = time - buttonSecs;
+        long speed = buttonSecs;
+        long distance = remaining * speed;
 
         if (distance > recordDistance)
             ways++;
@@ -35,11 +40,20 @@ int waysToBeat(int time, int recordDistance)
     return ways;
 }
 
-int total = 1;
-foreach(var race in input)
+long total = 1;
+foreach(var race in input1)
 {
     var ways = waysToBeat(race.time, race.distance);
     total *= ways;
 }
 
 Console.WriteLine($"Result: {total}");
+
+total = 1;
+foreach (var race in input2)
+{
+    var ways = waysToBeat(race.time, race.distance);
+    total *= ways;
+}
+
+Console.WriteLine($"Result2: {total}");
