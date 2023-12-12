@@ -80,6 +80,19 @@ foreach (var seed in seeds)
 var lowest = final.Select(x => x.location).Min();
 Console.WriteLine($"lowest 1: {lowest}");
 
+/* just for funzies */
+final.Clear();
+foreach (var seed in seeds)
+{
+    var lowestLocation = GetLowestMapping(seed, seed, "seed");
+
+    final.Add((seed, lowestLocation));
+}
+
+var lowest1a = final.Select(x => x.location).Min();
+Console.WriteLine($"lowest 1a: {lowest1a}");
+
+/* gather seed ranges */
 var seedRanges = new List<(Int64 seedStart, Int64 seedLength)>();
 for (var i = 0; i < seeds.Count; i += 2)
 {
