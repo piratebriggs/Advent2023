@@ -7,8 +7,8 @@ Console.WriteLine("Hello, World!");
 
 
 
-//var input = File.ReadAllText("input.txt");
-var input = File.ReadAllText("sample.txt");
+var input = File.ReadAllText("input.txt");
+//var input = File.ReadAllText("sample.txt");
 
 var treeData = new List<TreeEntry>();
 string instructions = "";
@@ -27,6 +27,25 @@ foreach (var line in input.Split("\r\n"))
     treeData.Add(new TreeEntry(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value));
 
 }
+
+int instructionCounter = 0;
+var currentNode = treeData.First(x=>x.Id == "AAA");
+int stepCounter = 0;
+while (true)
+{
+    var instruction = instructions[instructionCounter++];
+    if(instructionCounter >= instructions.Length) instructionCounter = 0;
+
+    var nextId = (instruction == 'L') ? currentNode.Left : currentNode.Right;
+
+    currentNode = treeData.First(x => x.Id == nextId);
+    stepCounter++;
+
+    if (currentNode.Id == "ZZZ")
+        break;
+}
+
+Console.WriteLine($"Steps: {stepCounter}");
 
 class TreeEntry
 {
