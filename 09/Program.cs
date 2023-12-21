@@ -8,6 +8,7 @@ var input = File.ReadAllText("input.txt");
 //var input = File.ReadAllText("sample.txt");
 
 long total1 = 0;
+long total2 = 0;
 foreach (var line in input.Split("\r\n"))
 {
 
@@ -26,6 +27,7 @@ foreach (var line in input.Split("\r\n"))
         history.Add(result);
         current = result;
     }
+    // Part 1 Calculate next value in sequence
     int difference = 0;
     for (var i = history.Count - 1; i >= 0; i--)
     {
@@ -39,8 +41,25 @@ foreach (var line in input.Split("\r\n"))
     }
 
     total1 += history[0][history[0].Count-1];
+
+    // Part 2 Caclulate previous value in sequence
+    difference = 0;
+    for (var i = history.Count - 1; i >= 0; i--)
+    {
+        var historyItem = history[i];
+        var firstValue = historyItem[0];
+
+        var newVal = firstValue - difference;
+        historyItem.Insert(0,newVal);
+
+        difference = newVal;
+    }
+
+    total2 += history[0][0];
+
 }
 Console.WriteLine($"Total1: {total1}");
+Console.WriteLine($"Total2: {total2}");
 
 List<int> DoIt(List<int> input)
 {
