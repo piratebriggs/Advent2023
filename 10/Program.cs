@@ -3,7 +3,7 @@
 Console.WriteLine("Hello, World!");
 
 
- var input = File.ReadAllText("input.txt");
+var input = File.ReadAllText("input.txt");
 //var input = File.ReadAllText("sample2.txt");
 
 // Read map
@@ -47,7 +47,7 @@ List<CellPos> ExitsFromStart(CellPos pos)
 {
     var result = new List<CellPos>();
     var north = pos with { y = pos.y - 1 };
-    if(Exits(north).Contains(pos)) 
+    if (Exits(north).Contains(pos))
         result.Add(north);
     var south = pos with { y = pos.y + 1 };
     if (Exits(south).Contains(pos))
@@ -124,13 +124,34 @@ void Traverse(CellPos start, int distance)
     }
 }
 
+void TraverseBreadth(List<CellPos> ghosts, int distance)
+{
+    while (true)
+    {
+        var newGhosts = new List<CellPos>();
+        foreach (var pos in ghosts)
+        {
+            if (!map[pos.y][pos.x].distance.HasValue)
+            {
+                newGhosts.AddRange(Exits(pos));
+                map[pos.y][pos.x].distance = distance;
+            }
+        }
+        if (newGhosts.Count == 0)
+            break;
+        ghosts = newGhosts;
+        distance += 1;
+    }
+}
+
 var start = FindStart();
-Traverse(start, 0);
+map[start.y][start.x].distance = 0;
+TraverseBreadth(Exits(start), 1);
 
 int maxDistance = 0;
-foreach(var line in map)
+foreach (var line in map)
 {
-    foreach(var cell in line)
+    foreach (var cell in line)
     {
         if (cell.distance.HasValue)
             Console.Write(cell.distance);
